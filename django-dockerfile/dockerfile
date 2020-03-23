@@ -1,0 +1,22 @@
+FROM python:3
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY ./django-dockerfile/requirements.txt requirements.txt
+
+RUN pip install --upgrade pip \
+&& pip install -r requirements.txt
+
+#copiando os arquivos de desenvolvimento para o container
+COPY ./aula10/ .
+
+WORKDIR /usr/src/app/aula10
+
+EXPOSE 8000
+
+CMD ["gunicorn", "aula10.wsgi:application", "-b", "0.0.0.0"]
+
+# de dentro da pasta do virtualenv -> docker build -t teste:1 -f ./django-dockerfile/dockerfile .
